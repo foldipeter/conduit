@@ -4,7 +4,7 @@ This module helps the testing process by configuring Selenium Chrome webdriver s
 
 Todo:
     [x] Creating a configuration that works locally
-    [ ] Creating a configuration that works on the GitHub Actions remote machine
+    [x] Creating a configuration that works on the GitHub Actions remote machine
 """
 
 from selenium.webdriver import Chrome
