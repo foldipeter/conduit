@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Builds and Starts
+    - name: Builds and Starts Docker
       run: |
         docker-compose up -d
         
@@ -33,6 +33,11 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
+    - name: Sleep for 60 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '60s'
+
     - name: Test with Pytest
       run: |
         pytest --alluredir=allure-results
