@@ -16,11 +16,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 def get_chrome_driver() -> Chrome:
     """Function that performs the configuration
 
-    It currently only makes Chrome webdriver that works locally.
+    It currently makes Chrome webdriver twith speciel arguments.
 
     Returns:
         Chrome: configurated Selenium Chrome webdriver
     """
     options = Options()
     options.add_experimental_option('detach', True)
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
     return Chrome(service=Service(executable_path=ChromeDriverManager().install()), options=options)
