@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Sun Apr 02 16:53:32 GMT 2023","Sun Apr 02 16:53:33 GMT 2023","777","test","test_automation","TestSignUpPage","","","Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.",""
