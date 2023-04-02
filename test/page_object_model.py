@@ -74,7 +74,8 @@ class ConduitHomePage(GeneralPage):
         Returns:
              WebElement: sign in link
         """
-        return self.driver.find_element(By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign in")]')
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign in")]')))
 
     def sign_up_link(self) -> WebElement:
         """Get sing up link from Conduit home page
@@ -82,9 +83,10 @@ class ConduitHomePage(GeneralPage):
         Returns:
             WebElement: sign up link
         """
-        return self.driver.find_element(By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign up")]')
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign up")]')))
 
-    def accept_cookie(self, in_list=False) -> list[WebElement] | WebElement:
+    def accept_cookie(self, in_list=False) -> WebElement | list[WebElement]:
         """Get accept cookie button from Conduit home page.
 
         The list format is useful when the existence of the element is also important for the test case.
@@ -93,7 +95,7 @@ class ConduitHomePage(GeneralPage):
             in_list(bool): if True return to list format
 
         Returns:
-            list[WebElement] | WebElement: accept cookie button in a list
+            WebElement | list[WebElement]: accept cookie button in a list
         """
         return self.driver.find_elements(By.CLASS_NAME,
                                          'cookie__bar__buttons__button--accept') if in_list else self.driver.find_element(
@@ -108,6 +110,15 @@ class ConduitHomePage(GeneralPage):
 
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//li[@class="nav-item"]/a[contains(@href, "#/@")]')))
+
+    def log_out_link(self) -> WebElement:
+        """Get log out link from Conduit home page
+
+        Returns:
+            WebElement: log out link
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Log out")]')))
 
 
 class ConduitSignInPage(GeneralPage):
