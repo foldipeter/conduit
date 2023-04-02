@@ -72,7 +72,7 @@ class ConduitHomePage(GeneralPage):
         """Get sing in link from Conduit home page
 
         Returns:
-             WebElement: sign in link element
+             WebElement: sign in link
         """
         return self.driver.find_element(By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign in")]')
 
@@ -80,9 +80,24 @@ class ConduitHomePage(GeneralPage):
         """Get sing up link from Conduit home page
 
         Returns:
-            WebElement: sign up link element
+            WebElement: sign up link
         """
         return self.driver.find_element(By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Sign up")]')
+
+    def accept_cookie(self, in_list=False) -> list[WebElement] | WebElement:
+        """Get accept cookie button from Conduit home page.
+
+        The list format is useful when the existence of the element is also important for the test case.
+
+        Arguments:
+            in_list(bool): if True return to list format
+
+        Returns:
+            list[WebElement] | WebElement: accept cookie button in a list
+        """
+        return self.driver.find_elements(By.CLASS_NAME,
+                                         'cookie__bar__buttons__button--accept') if in_list else self.driver.find_element(
+            By.CLASS_NAME, 'cookie__bar__buttons__button--accept')
 
 
 class ConduitSignInPage(GeneralPage):
