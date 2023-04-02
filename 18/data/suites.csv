@@ -1,5 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Sun Apr 02 18:50:57 GMT 2023","Sun Apr 02 18:50:58 GMT 2023","755","test","test_automation","TestSignUpPage","","","Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.",""
-"passed","Sun Apr 02 18:50:59 GMT 2023","Sun Apr 02 18:51:00 GMT 2023","769","test","test_automation","TestSignUpPage","","","Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.",""
-"passed","Sun Apr 02 18:51:01 GMT 2023","Sun Apr 02 18:51:03 GMT 2023","2362","test","test_automation","TestSignUpPage","","","Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.",""
-"passed","Sun Apr 02 18:50:55 GMT 2023","Sun Apr 02 18:50:56 GMT 2023","780","test","test_automation","TestSignUpPage","","","Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.",""
