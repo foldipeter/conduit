@@ -99,6 +99,16 @@ class ConduitHomePage(GeneralPage):
                                          'cookie__bar__buttons__button--accept') if in_list else self.driver.find_element(
             By.CLASS_NAME, 'cookie__bar__buttons__button--accept')
 
+    def username_link(self) -> WebElement:
+        """Get username link from Conduit home page
+
+        Returns:
+            WebElement: username link
+        """
+
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(@href, "#/@")]')))
+
 
 class ConduitSignInPage(GeneralPage):
     """Conduit sign in page model
