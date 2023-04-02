@@ -14,9 +14,37 @@ class TestSignUpPage:
 
     @allure.id('TC1')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.')
-    def test_register_negative(self):
+    def test_register_negative_username(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_up().click()
         assert self.page.modal_title().text == 'Registration failed!'
         assert self.page.modal_text().text == 'Username field required.'
+
+    @allure.id('TC2')
+    @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.')
+    def test_register_negative_username(self):
+        self.page.username_input().send_keys('PirosCica23')
+        self.page.email_input().send_keys('piros_cica23@gmail.com')
+        self.page.sign_up().click()
+        assert self.page.modal_title().text == 'Registration failed!'
+        assert self.page.modal_text().text == 'Email field required.'
+
+    @allure.id('TC3')
+    @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.')
+    def test_register_negative_username(self):
+        self.page.username_input().send_keys('PirosCica23')
+        self.page.password_input().send_keys('Piroska23')
+        self.page.sign_up().click()
+        assert self.page.modal_title().text == 'Registration failed!'
+        assert self.page.modal_text().text == 'Password field required.'
+
+    @allure.id('TC4')
+    @allure.title('Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.')
+    def test_register_negative_username(self):
+        self.page.username_input().send_keys('PirosCica23')
+        self.page.email_input().send_keys('piros_cica23@gmail.com')
+        self.page.password_input().send_keys('Piroska23')
+        self.page.sign_up().click()
+        assert self.page.modal_title().text == 'Welcome!'
+        assert self.page.modal_text().text == 'Your registration was successful!'
