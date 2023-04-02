@@ -1,3 +1,31 @@
+"""Teszt automatizálás
+
+Todo:
+    [X] Regisztráció (4 db negatív és 1 db pozitív)
+        [X] TC001 - Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.
+        [X] TC002 - Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.
+        [X] TC003 - Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.
+        [X] TC004 - Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.
+        [X] TC005 - Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.
+    [X] Bejelentkezés (4db negatív és 1 db pozitív)
+        [X] TC007 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés jelszó mező üresen hagyása miatt.
+        [X] TC008 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés email cím mező üresen hagyása miatt.
+        [X] TC009 - Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.
+        [X] TC010 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.
+        [X] TC011 - Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.
+    [ ] Adatkezelési nyilatkozat használata (1 pozitív 0 negatív) # negatív teszteset?
+        [X] TC006 - Adatkezelési tájékoztató sikeres elfogadása.
+    [ ] Adatok listázása
+    [ ] Több oldalas lista bejárása
+    [ ] Új adat bevitel
+    [ ] Ismételt és sorozatos adatbevitel adatforrásból
+    [ ] Meglévő adat módosítás
+    [ ] Adat vagy adatok törlése
+    [ ] Adatok lementése felületről
+    [ ] Kijelentkezés (1 pozitív 0 negatív) # negatív teszteset?
+        [X] TC012 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
+"""
+
 import page_object_model as pom
 import configuration_chrome_driver as conf_driver
 import allure
