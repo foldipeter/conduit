@@ -63,7 +63,7 @@ class TestSignUpPage:
         assert self.page.modal_text().text == 'Email already taken.'
 
 
-class TestHomePage:
+class TestHomePageBeforeLogIn:
 
     def setup_method(self):
         self.page = pom.ConduitHomePage(conf_driver.get_chrome_driver(remote=True))
@@ -75,7 +75,8 @@ class TestHomePage:
     @allure.id('TC006')
     @allure.title('Adatkezelési tájékoztató sikeres elfogadása.')
     def test_accept_cookie(self):
-        self.page.accept_cookie().click()
+        self.page.accept_cookie(in_list=False).click()
+        self.page.refresh()
         assert len(self.page.accept_cookie(in_list=True)) == 0
 
 
@@ -88,7 +89,8 @@ class TestSignInPage:
         self.page.close()
 
     @allure.id('TC007')
-    @allure.title('Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés jelszó mező üresen hagyása miatt.')
+    @allure.title(
+        'Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés jelszó mező üresen hagyása miatt.')
     def test_login_negative_password(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.sign_in().click()
@@ -96,7 +98,8 @@ class TestSignInPage:
         assert self.page.modal_text().text == 'Password field required.'
 
     @allure.id('TC008')
-    @allure.title('Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés email cím mező üresen hagyása miatt.')
+    @allure.title(
+        'Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés email cím mező üresen hagyása miatt.')
     def test_login_negative_email(self):
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_in().click()
@@ -129,3 +132,23 @@ class TestSignInPage:
         self.page.sign_in().click()
         self.page = pom.ConduitHomePage(self.page.driver)
         assert self.page.username_link().text == 'PirosCica23'
+
+
+class TestHomePageAfterLogIn:
+
+    def setup_method(self):
+        page = pom.ConduitSignInPage(conf_driver.get_chrome_driver(remote=True))
+        page.open()
+        page.email_input().send_keys('piros_cica23@gmail.com')
+        page.password_input().send_keys('Piroska23')
+        page.sign_in().click()
+        self.page = pom.ConduitHomePage(page.driver)
+
+    def teardown_method(self):
+        self.page.close()
+
+    @allure.id('TC012')
+    @allure.title('Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.')
+    def test_logout_positive(self):
+        self.page.log_out_link().click()
+        assert self.page.sign_in_link().is_displayed()
