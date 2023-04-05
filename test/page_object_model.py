@@ -56,10 +56,10 @@ class GeneralPage:
         self.driver.refresh()
 
 
-class ConduitHomePage(GeneralPage):
-    """Conduit home page modell
+class ConduitHomePageWithoutLogin(GeneralPage):
+    """Conduit home page (without login) modell
 
-    Conduit home page model from general page model.
+    Conduit home page (without login) model from general page model.
 
     Arguments:
         driver (Chrome): Selenium Chrome webdriver
@@ -100,6 +100,19 @@ class ConduitHomePage(GeneralPage):
         return self.driver.find_elements(By.CLASS_NAME,
                                          'cookie__bar__buttons__button--accept') if in_list else self.driver.find_element(
             By.CLASS_NAME, 'cookie__bar__buttons__button--accept')
+
+
+class ConduitHomePageWithLogin(GeneralPage):
+    """Conduit home page (with login) modell
+
+    Conduit home page (with login) model from general page model.
+
+    Arguments:
+        driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver, url='http://localhost:1667/#/')
 
     def username_link(self) -> WebElement:
         """Get username link from Conduit home page

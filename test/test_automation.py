@@ -77,7 +77,7 @@ class TestSignUpPage:
         assert self.page.modal_title().text == 'Welcome!'
         assert self.page.modal_text().text == 'Your registration was successful!'
         self.page.modal_ok().click()
-        self.page = pom.ConduitHomePage(self.page.driver)
+        self.page = pom.ConduitHomePageWithLogin(self.page.driver)
         assert self.page.username_link().text == 'PirosCica23'
 
     @allure.id('TC005')
@@ -94,7 +94,7 @@ class TestSignUpPage:
 class TestHomePageBeforeLogIn:
 
     def setup_method(self):
-        self.page = pom.ConduitHomePage(conf_driver.get_chrome_driver(remote=True))
+        self.page = pom.ConduitHomePageWithoutLogin(conf_driver.get_chrome_driver(remote=True))
         self.page.open()
 
     def teardown_method(self):
@@ -158,7 +158,7 @@ class TestSignInPage:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_in().click()
-        self.page = pom.ConduitHomePage(self.page.driver)
+        self.page = pom.ConduitHomePageWithLogin(self.page.driver)
         assert self.page.username_link().text == 'PirosCica23'
 
 
@@ -170,7 +170,7 @@ class TestHomePageAfterLogIn:
         page.email_input().send_keys('piros_cica23@gmail.com')
         page.password_input().send_keys('Piroska23')
         page.sign_in().click()
-        self.page = pom.ConduitHomePage(page.driver)
+        self.page = pom.ConduitHomePageWithLogin(page.driver)
 
     def teardown_method(self):
         self.page.close()
@@ -179,4 +179,5 @@ class TestHomePageAfterLogIn:
     @allure.title('Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.')
     def test_logout_positive(self):
         self.page.log_out_link().click()
+        self.page = pom.ConduitHomePageWithoutLogin(self.page.driver)
         assert self.page.sign_in_link().is_displayed()
