@@ -188,7 +188,7 @@ class ConduitGeneralModalWindow(GeneralPage):
     def __init__(self, driver: Chrome):
         super().__init__(driver=driver)
 
-    def modal_title(self) -> WebElement:
+    def title(self) -> WebElement:
         """Get title from Conduit modal pop up
 
         Returns:
@@ -197,7 +197,7 @@ class ConduitGeneralModalWindow(GeneralPage):
         return self.driverWait.until(
             expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-title')))
 
-    def modal_text(self) -> WebElement:
+    def text(self) -> WebElement:
         """Get text from Conduit modal pop up
 
         Returns:
@@ -206,7 +206,7 @@ class ConduitGeneralModalWindow(GeneralPage):
         return self.driverWait.until(
             expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-text')))
 
-    def modal_ok(self) -> WebElement:
+    def ok(self) -> WebElement:
         """Get ok button from Conduit modal pop up
 
         Returns:

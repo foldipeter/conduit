@@ -54,8 +54,10 @@ import allure
 class TestRegistration:
 
     def setup_method(self):
-        self.page = pom.ConduitSignUpPage(conf_driver.get_chrome_driver(remote=True))
+        driver = conf_driver.get_chrome_driver(remote=True)
+        self.page = pom.ConduitSignUpPage(driver=driver)
         self.page.open(url='http://localhost:1667/#/register')
+        self.modal = pom.ConduitGeneralModalWindow(driver=driver)
 
     def teardown_method(self):
         self.page.close()
@@ -66,9 +68,8 @@ class TestRegistration:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_up().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Registration failed!'
-        assert self.page.modal_text().text == 'Username field required.'
+        assert self.modal.title().text == 'Registration failed!'
+        assert self.modal.text().text == 'Username field required.'
 
     @allure.id('TC002')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.')
@@ -76,9 +77,8 @@ class TestRegistration:
         self.page.username_input().send_keys('PirosCica23')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_up().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Registration failed!'
-        assert self.page.modal_text().text == 'Email field required.'
+        assert self.modal.title().text == 'Registration failed!'
+        assert self.modal.text().text == 'Email field required.'
 
     @allure.id('TC003')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.')
@@ -86,9 +86,8 @@ class TestRegistration:
         self.page.username_input().send_keys('PirosCica23')
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.sign_up().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Registration failed!'
-        assert self.page.modal_text().text == 'Password field required.'
+        assert self.modal.title().text == 'Registration failed!'
+        assert self.modal.text().text == 'Password field required.'
 
     @allure.id('TC004')
     @allure.title('Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.')
@@ -97,12 +96,11 @@ class TestRegistration:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_up().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Welcome!'
-        assert self.page.modal_text().text == 'Your registration was successful!'
-        self.page.modal_ok().click()
-        self.page = pom.ConduitHomePageWithLogin(self.page.driver)
-        assert self.page.username_link().text == 'PirosCica23'
+        assert self.modal.title().text == 'Welcome!'
+        assert self.modal.text().text == 'Your registration was successful!'
+        self.modal.ok().click()
+        page = pom.ConduitHomePageWithLogin(self.page.driver)
+        assert page.username_link().text == 'PirosCica23'
 
     @allure.id('TC005')
     @allure.title('Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.')
@@ -111,15 +109,14 @@ class TestRegistration:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_up().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Registration failed!'
-        assert self.page.modal_text().text == 'Email already taken.'
+        assert self.modal.title().text == 'Registration failed!'
+        assert self.modal.text().text == 'Email already taken.'
 
 
 class TestPrivacyPolicy:
 
     def setup_method(self):
-        self.page = pom.ConduitHomePageWithoutLogin(conf_driver.get_chrome_driver(remote=True))
+        self.page = pom.ConduitHomePageWithoutLogin(driver=conf_driver.get_chrome_driver(remote=True))
         self.page.open(url='http://localhost:1667/#/')
 
     def teardown_method(self):
@@ -135,8 +132,10 @@ class TestPrivacyPolicy:
 
 class TestLogin:
     def setup_method(self):
-        self.page = pom.ConduitSignInPage(conf_driver.get_chrome_driver(remote=True))
+        driver = conf_driver.get_chrome_driver(remote=True)
+        self.page = pom.ConduitSignInPage(driver=driver)
         self.page.open(url='http://localhost:1667/#/login')
+        self.modal = pom.ConduitGeneralModalWindow(driver=driver)
 
     def teardown_method(self):
         self.page.close()
@@ -147,9 +146,8 @@ class TestLogin:
     def test_login_negative_password(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.sign_in().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Login failed!'
-        assert self.page.modal_text().text == 'Password field required.'
+        assert self.modal.title().text == 'Login failed!'
+        assert self.modal.text().text == 'Password field required.'
 
     @allure.id('TC009')
     @allure.title(
@@ -157,9 +155,8 @@ class TestLogin:
     def test_login_negative_email(self):
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_in().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Login failed!'
-        assert self.page.modal_text().text == 'Email field required.'
+        assert self.modal.title().text == 'Login failed!'
+        assert self.modal.text().text == 'Email field required.'
 
     @allure.id('TC010')
     @allure.title('Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.')
@@ -167,9 +164,8 @@ class TestLogin:
         self.page.email_input().send_keys('piros_cica24@gmail.com')
         self.page.password_input().send_keys('Piroska24')
         self.page.sign_in().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Login failed!'
-        assert self.page.modal_text().text == 'Invalid user credentials.'
+        assert self.modal.title().text == 'Login failed!'
+        assert self.modal.text().text == 'Invalid user credentials.'
 
     @allure.id('TC011')
     @allure.title('Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.')
@@ -177,9 +173,8 @@ class TestLogin:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska24')
         self.page.sign_in().click()
-        self.page = pom.ConduitGeneralModalWindow(self.page.driver)
-        assert self.page.modal_title().text == 'Login failed!'
-        assert self.page.modal_text().text == 'Invalid user credentials.'
+        assert self.modal.title().text == 'Login failed!'
+        assert self.modal.text().text == 'Invalid user credentials.'
 
     @allure.id('TC012')
     @allure.title('Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.')
@@ -187,19 +182,20 @@ class TestLogin:
         self.page.email_input().send_keys('piros_cica23@gmail.com')
         self.page.password_input().send_keys('Piroska23')
         self.page.sign_in().click()
-        self.page = pom.ConduitHomePageWithLogin(self.page.driver)
-        assert self.page.username_link().text == 'PirosCica23'
+        page = pom.ConduitHomePageWithLogin(self.page.driver)
+        assert page.username_link().text == 'PirosCica23'
 
 
 class TestLogout:
 
     def setup_method(self):
-        page = pom.ConduitSignInPage(conf_driver.get_chrome_driver(remote=True))
+        driver = conf_driver.get_chrome_driver(remote=True)
+        page = pom.ConduitSignInPage(driver=driver)
         page.open(url='http://localhost:1667/#/login')
         page.email_input().send_keys('piros_cica23@gmail.com')
         page.password_input().send_keys('Piroska23')
         page.sign_in().click()
-        self.page = pom.ConduitHomePageWithLogin(page.driver)
+        self.page = pom.ConduitHomePageWithLogin(driver)
 
     def teardown_method(self):
         self.page.close()
