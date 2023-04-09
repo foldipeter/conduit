@@ -1,13 +1,13 @@
 """Teszt automatizálás
 
 Todo:
-    [ ] Regisztráció (5 db negatív és 1 db pozitív)
+    [?] Regisztráció (5 db negatív és 1 db pozitív)
         [X] TC_001 - Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.
         [X] TC_002 - Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.
         [X] TC_003 - Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.
         [X] TC_004 - Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.
         [X] TC_005 - Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.
-        [ ] TC_006 - Új felhasználó fiók sikertelen létrehozása már létező név megadásával.
+        [?] TC_006 - Új felhasználó fiók sikertelen létrehozása már létező név megadásával.
                     # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
     [X] Bejelentkezés (4 db negatív és 1 db pozitív)
         [X] TC_008 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés
@@ -17,15 +17,15 @@ Todo:
         [X] TC_010 - Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.
         [X] TC_011 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.
         [X] TC_012 - Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.
-    [ ] Adatkezelési nyilatkozat használata (0 db negatív és 1 db pozitív) # negatív teszteset?
+    [X] Adatkezelési nyilatkozat használata (0 db negatív és 1 db pozitív) # negatív teszteset?
         [X] TC_007 - Adatkezelési tájékoztató sikeres elfogadása.
-    [ ] Adatok listázása (X db negetív és Y db pozitív)
-    [ ] Több oldalas lista bejárása (X db negetív és Y db pozitív)
-    [ ] Új adat bevitel (1 db negetív és 1 db pozitív)
+    [ ] Adatok listázása (0 db negetív és 0 db pozitív)
+    [ ] Több oldalas lista bejárása (0 db negetív és 0 db pozitív)
+    [?] Új adat bevitel (1 db negetív és 1 db pozitív)
         [X] TC_024 - Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.
         [X] TC_025 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
                      cikk címének hiánya miatt.
-        [ ] TC_026 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
+        [?] TC_026 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
                      már létező cikk cím miatt. # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
     [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 2 db pozitív)
         [X] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
@@ -59,8 +59,8 @@ Todo:
                      # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
     [ ] Adat vagy adatok törlése (0 db negetív és 1 db pozitív)
         [ ] TC_034 - Korábban létrehozott cikk sikeres törlése.
-    [ ] Adatok lementése felületről (X db negetív és Y db pozitív)
-    [ ] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
+    [ ] Adatok lementése felületről (0 db negetív és 0 db pozitív)
+    [X] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
         [X] TC_013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
 """
 
@@ -353,6 +353,8 @@ class TestRepeatedInputFromSource:
         self.home_with_login = pom.ConduitHomePageWithLogin(driver=driver)
         self.home_without_login = pom.ConduitHomePageWithoutLogin(driver=driver)
         self.home_without_login.open(url='http://localhost:1667/#/')
+        self.new_article = pom.ConduitNewArticle(driver=driver)
+        self.article = pom.ConduitArticle(driver=driver)
 
     def teardown_method(self):
         self.registration.close()
@@ -373,6 +375,32 @@ class TestRepeatedInputFromSource:
                 self.modal.ok().click()
                 assert self.home_with_login.username_link().text == record['username']
                 self.home_with_login.log_out_link().click()
+
+    @allure.id('ATC_02')
+    @allure.title('Sorozatos sikeres cikk hozzáadása article_data.csv fájlból')
+    def test_register_positive(self):
+        self.home_without_login.sign_in_link().click()
+        page = pom.ConduitSignInPage(driver=self.modal.driver)
+        page.email_input().send_keys('foltos_cica23@gmail.com')
+        page.password_input().send_keys('FoltosCica23')
+        page.sign_in().click()
+        assert self.home_with_login.username_link().text == 'FoltosCica23'
+        with open('./test/article_data.csv', mode='r', encoding='utf-8-sig') as user_data_csv:
+            csv_reader = csv.DictReader(user_data_csv, delimiter=";")
+            for record in csv_reader:
+                self.home_with_login.new_article_link().click()
+                self.new_article.title_input().send_keys(record['title'])
+                self.new_article.about_input().send_keys(record['about'])
+                self.new_article.article_textarea().send_keys(
+                    f'# Napi idézet\n\n> {record["article"]}\n\n*{record["author"]}*')
+                tags = record['tags'].split(',')
+                for tag in tags:
+                    self.new_article.tags_input().send_keys(tag)
+                    self.new_article.tags_input().send_keys(Keys.ENTER)
+                self.new_article.publish_article().click()
+                assert self.article.title().text == record['title']
+                for element, tag in zip(self.article.tag_list(), tags):
+                    assert element.text == tag
 
 
 class TestNewArticle:
@@ -400,15 +428,15 @@ class TestNewArticle:
         self.page.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
                                                '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
                                                '**Írd meg kommentben a fentiek közül!**')
-        titles = ['cica', 'kerdes', 'valasz']
-        for title in titles:
-            self.page.tags_input().send_keys(title)
+        tags = ['cica', 'kerdes', 'valasz']
+        for tag in tags:
+            self.page.tags_input().send_keys(tag)
             self.page.tags_input().send_keys(Keys.ENTER)
         self.page.publish_article().click()
         page = pom.ConduitArticle(driver=self.page.driver)
         assert page.title().text == 'Te milyen cica vagy?'
-        for element, title in zip(page.tag_list(), titles):
-            assert element.text == title
+        for element, tag in zip(page.tag_list(), tags):
+            assert element.text == tag
 
     @allure.id('TC_025')
     @allure.title(
