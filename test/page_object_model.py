@@ -30,7 +30,6 @@ class GeneralPage:
 
     Arguments:
         driver (Chrome):Selenium Chrome webdriver
-        url (str): URL
 
     Attributes:
         driver (Chrome): Selenium Chrome webdriver
@@ -39,16 +38,18 @@ class GeneralPage:
     """
     driver: Chrome
     driverWait: WebDriverWait
-    url: str
 
-    def __init__(self, driver: Chrome, url: str):
+    def __init__(self, driver: Chrome):
         self.driver = driver
         self.driverWait = WebDriverWait(driver=driver, timeout=5)
-        self.url = url
 
-    def open(self) -> None:
-        """Open URL with driver.get method"""
-        self.driver.get(self.url)
+    def open(self, url: str) -> None:
+        """Open URL with driver.get method
+
+        Arguments:
+        url (str): URL
+        """
+        self.driver.get(url)
         self.driver.maximize_window()
 
     def close(self) -> None:
@@ -70,7 +71,7 @@ class ConduitHomePageWithoutLogin(GeneralPage):
     """
 
     def __init__(self, driver: Chrome):
-        super().__init__(driver=driver, url='http://localhost:1667/#/')
+        super().__init__(driver=driver)
 
     def sign_in_link(self) -> WebElement:
         """Get sing in link from Conduit home page
@@ -116,7 +117,7 @@ class ConduitHomePageWithLogin(GeneralPage):
     """
 
     def __init__(self, driver: Chrome):
-        super().__init__(driver=driver, url='http://localhost:1667/#/')
+        super().__init__(driver=driver)
 
     def username_link(self) -> WebElement:
         """Get username link from Conduit home page
@@ -148,7 +149,7 @@ class ConduitSignInPage(GeneralPage):
     """
 
     def __init__(self, driver: Chrome):
-        super().__init__(driver=driver, url='http://localhost:1667/#/login')
+        super().__init__(driver=driver)
 
     def email_input(self) -> WebElement:
         """Get email input from Conduit sign in page
@@ -185,7 +186,7 @@ class ConduitGeneralModalWindow(GeneralPage):
     """
 
     def __init__(self, driver: Chrome):
-        super().__init__(driver=driver, url='')
+        super().__init__(driver=driver)
 
     def modal_title(self) -> WebElement:
         """Get title from Conduit modal pop up
@@ -225,7 +226,7 @@ class ConduitSignUpPage(GeneralPage):
     """
 
     def __init__(self, driver: Chrome):
-        super().__init__(driver=driver, url='http://localhost:1667/#/register')
+        super().__init__(driver=driver)
 
     def username_input(self) -> WebElement:
         """Get username input from Conduit sign up page

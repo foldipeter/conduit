@@ -51,11 +51,11 @@ import configuration_chrome_driver as conf_driver
 import allure
 
 
-class TestSignUpPage:
+class TestRegistration:
 
     def setup_method(self):
         self.page = pom.ConduitSignUpPage(conf_driver.get_chrome_driver(remote=True))
-        self.page.open()
+        self.page.open(url='http://localhost:1667/#/register')
 
     def teardown_method(self):
         self.page.close()
@@ -116,11 +116,11 @@ class TestSignUpPage:
         assert self.page.modal_text().text == 'Email already taken.'
 
 
-class TestHomePageBeforeLogIn:
+class TestPrivacyPolicy:
 
     def setup_method(self):
         self.page = pom.ConduitHomePageWithoutLogin(conf_driver.get_chrome_driver(remote=True))
-        self.page.open()
+        self.page.open(url='http://localhost:1667/#/')
 
     def teardown_method(self):
         self.page.close()
@@ -133,10 +133,10 @@ class TestHomePageBeforeLogIn:
         assert len(self.page.accept_cookie(in_list=True)) == 0
 
 
-class TestSignInPage:
+class TestLogin:
     def setup_method(self):
         self.page = pom.ConduitSignInPage(conf_driver.get_chrome_driver(remote=True))
-        self.page.open()
+        self.page.open(url='http://localhost:1667/#/login')
 
     def teardown_method(self):
         self.page.close()
@@ -191,11 +191,11 @@ class TestSignInPage:
         assert self.page.username_link().text == 'PirosCica23'
 
 
-class TestHomePageAfterLogIn:
+class TestLogout:
 
     def setup_method(self):
         page = pom.ConduitSignInPage(conf_driver.get_chrome_driver(remote=True))
-        page.open()
+        page.open(url='http://localhost:1667/#/login')
         page.email_input().send_keys('piros_cica23@gmail.com')
         page.password_input().send_keys('Piroska23')
         page.sign_in().click()
