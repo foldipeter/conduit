@@ -12,7 +12,7 @@ Todo:
     [x] Conduit sign up page model
     [x] Conduit settings page model
     [ ] Conduit new article page model
-    [ ] Conduit profil page model
+    [ ] Conduit profile page model
     [ ] Conduit article page model
     ...
 """
@@ -35,7 +35,6 @@ class GeneralPage:
     Attributes:
         driver (Chrome): Selenium Chrome webdriver
         driverWait (WebDriverWait): Selenium Chrome webdriver wait
-        url (str): URL
     """
     driver: Chrome
     driverWait: WebDriverWait
@@ -63,7 +62,7 @@ class GeneralPage:
 
 
 class ConduitHomePageWithoutLogin(GeneralPage):
-    """Conduit home page (without login) modell
+    """Conduit home page (without login) model
 
     Conduit home page (without login) model from general page model.
 
@@ -104,12 +103,13 @@ class ConduitHomePageWithoutLogin(GeneralPage):
             WebElement | list[WebElement]: accept cookie button in a list
         """
         return self.driver.find_elements(By.CLASS_NAME,
-                                         'cookie__bar__buttons__button--accept') if in_list else self.driver.find_element(
+                                         'cookie__bar__buttons__button--accept'
+                                         ) if in_list else self.driver.find_element(
             By.CLASS_NAME, 'cookie__bar__buttons__button--accept')
 
 
 class ConduitHomePageWithLogin(GeneralPage):
-    """Conduit home page (with login) modell
+    """Conduit home page (with login) model
 
     Conduit home page (with login) model from general page model.
 
@@ -143,10 +143,19 @@ class ConduitHomePageWithLogin(GeneralPage):
         """Get settings link from Conduit home page
 
         Returns:
-            WebElement: log out link
+            WebElement: settings link
         """
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Settings")]')))
+
+    def new_article_link(self) -> WebElement:
+        """Get new article link from Conduit home page
+
+        Returns:
+            WebElement: new article link
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "New Article")]')))
 
 
 class ConduitSignInPage(GeneralPage):
@@ -227,7 +236,7 @@ class ConduitGeneralModalWindow(GeneralPage):
 
 
 class ConduitSignUpPage(GeneralPage):
-    """Conduit sign up page modell
+    """Conduit sign up page model
 
     Conduit sign up page model from general page model.
 
@@ -294,7 +303,7 @@ class ConduitSettingsPage(GeneralPage):
             (By.XPATH, '//h1[contains(text(), "Settings")]')))
 
     def profile_picture_input(self) -> WebElement:
-        """Get profil picture input from Conduit settings page
+        """Get profile picture input from Conduit settings page
 
         Returns:
             WebElement: profile picture input
@@ -349,13 +358,13 @@ class ConduitProfilePage(GeneralPage):
 
     Arguments:
         driver (Chrome): Selenium Chrome webdriver
-        """
+    """
 
     def __init__(self, driver: Chrome):
         super().__init__(driver=driver)
 
     def profile_picture(self):
-        """Get profil picture img from Conduit home page
+        """Get profile picture img from Conduit home page
 
         Returns:
             WebElement: profile picture img
@@ -364,13 +373,14 @@ class ConduitProfilePage(GeneralPage):
             (By.CLASS_NAME, 'user-img')))
 
     def profile_name(self):
-        """Get profil name header from Conduit home page
+        """Get profile name header from Conduit home page
 
         Returns:
             WebElement: profile name header
         """
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//*[@class="user-info"]//h4')))
+
     def profile_bio(self):
         """Get profile bio paragraph from Conduit home page
 
@@ -379,3 +389,135 @@ class ConduitProfilePage(GeneralPage):
         """
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//*[@class="user-info"]//p')))
+
+
+class ConduitNewArticle(GeneralPage):
+    """Conduit new article page model
+
+    Conduit new article page model from general page model.
+
+    Arguments:
+        driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver)
+
+    def title_input(self) -> WebElement:
+        """Get article title input from Conduit new article page
+
+        (With in build waiting for title input.)
+
+        Returns:
+            WebElement: article title input
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//input[@type="text"][contains(@placeholder, "Article Title")]')))
+
+    def about_input(self) -> WebElement:
+        """Get article title input from Conduit new article page
+
+        Returns:
+            WebElement: article about input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="text"][contains(@placeholder, "article about")]')
+
+    def article_textarea(self) -> WebElement:
+        """Get article textarea from Conduit new article page
+
+        Returns:
+            WebElement: article textarea input
+        """
+        return self.driver.find_element(By.XPATH, '//textarea[contains(@placeholder, "Write your article")]')
+
+    def tags_input(self) -> WebElement:
+        """Get article tags input from Conduit new article page
+
+        Returns:
+            WebElement: article tags input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="text"][contains(@placeholder, "Enter tags")]')
+
+    def publish_article(self) -> WebElement:
+        """Get update publish article button from Conduit new article page
+
+        Returns:
+            WebElement: publish article button
+        """
+        return self.driver.find_element(By.XPATH, '//button[contains(text(), "Publish Article")]')
+
+
+class ConduitArticle(GeneralPage):
+    """Conduit article page model
+
+    Conduit article page model from general page model.
+
+    Arguments:
+        driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver)
+
+    def title(self):
+        """Get article title header from Conduit article page
+
+        Returns:
+            WebElement: article title header
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="banner"]//h1')))
+
+    def author(self):
+        """Get article author from Conduit article page
+
+        Returns:
+            WebElement: article author
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="info"]//*[@class="author"]')))
+
+    def date(self):
+        """Get article date from Conduit article page
+
+        Returns:
+            WebElement: article date
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="info"]//*[@class="date"]')))
+
+    def edit_article(self):
+        """Get edit article link from Conduit article page
+
+        Returns:
+            WebElement: edit article
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//a//*[contains(text(), "Edit Article")]')))
+
+    def delete_article(self):
+        """Get delete article from Conduit article page
+
+        Returns:
+            WebElement: delete article
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//button//*[contains(text(), "Delete Article")]')))
+
+    def tag_list(self):
+        """Get tag list from Conduit article page
+
+        Returns:
+            list[WebElement]: tag list
+        """
+
+        return self.driver.find_elements(By.XPATH, '//*[@class="tag-list"]/*')
+
+    def article(self):
+        """Get article from Conduit article page
+
+        Returns:
+            WebElement: delete article
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="tag-list"]/parent::div/div[not(contains(@class, "tag"))]')))
