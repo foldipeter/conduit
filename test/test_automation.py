@@ -21,9 +21,12 @@ Todo:
         [X] TC_007 - Adatkezelési tájékoztató sikeres elfogadása.
     [ ] Adatok listázása (X db negetív és Y db pozitív)
     [ ] Több oldalas lista bejárása (X db negetív és Y db pozitív)
-    [ ] Új adat bevitel (X db negetív és Y db pozitív)
-    [ ] Ismételt és sorozatos adatbevitel adatforrásból (X db negetív és 1 db pozitív)
-        [ ] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
+    [ ] Új adat bevitel (1 db negetív és 1 db pozitív)
+        [ ] TC_024 - Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.
+        [ ] TC_025 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
+                     cikk címének hiánya miatt.
+    [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 1 db pozitív)
+        [X] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
     [ ] Meglévő adat módosítás (5 db negatív és 5 db pozitív)
         [X] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
                      profilkép hivatkozásának nem megadása miatt.
@@ -278,7 +281,7 @@ class TestEditProfile:
     @allure.id('TC_019')
     @allure.title('Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása' +
                   'email cím mező üresen hagyása miatt.')
-    def test_profile_email_negative(self):
+    def test_profile_email_negative_empty(self):
         while len(self.page.email_input().get_attribute('value')) > 0:
             self.page.email_input().send_keys(Keys.BACKSPACE)
         self.page.update_settings().click()
@@ -288,7 +291,7 @@ class TestEditProfile:
     @allure.id('TC_020')
     @allure.title(
         'Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása már létező email cím miatt.')
-    def test_profile_email_negative(self):
+    def test_profile_email_negative_exists(self):
         self.page.email_input().clear()
         self.page.email_input().send_keys('testuser1@example.com')
         self.page.update_settings().click()
@@ -356,3 +359,23 @@ class TestRepeatedInputFromSource:
                 self.modal.ok().click()
                 assert self.home_with_login.username_link().text == record['username']
                 self.home_with_login.log_out_link().click()
+
+
+class TestNewArticle:
+
+    def setup_method(self):
+        pass
+
+    def teardown_method(self):
+        pass
+
+    @allure.id('TC_024')
+    @allure.title('Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.')
+    def test_new_article_positive(self):
+        pass
+
+    @allure.id('TC_025')
+    @allure.title(
+        'Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása cikk címének hiánya miatt.')
+    def test_new_article_negative(self):
+        pass
