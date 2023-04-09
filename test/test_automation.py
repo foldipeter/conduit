@@ -343,7 +343,7 @@ class TestRepeatedInputFromSource:
     @allure.id('ATC_01')
     @allure.title('Sorozatos sikeres regisztráció user_data.csv fájlból')
     def test_register_positive(self):
-        with open('./user_data.csv', mode='r') as user_data_csv:
+        with open('./test/user_data.csv', mode='r') as user_data_csv:
             csv_reader = csv.DictReader(user_data_csv)
             for record in csv_reader:
                 self.home_without_login.sign_up_link().click()
