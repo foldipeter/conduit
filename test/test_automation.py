@@ -378,7 +378,7 @@ class TestRepeatedInputFromSource:
 
     @allure.id('ATC_02')
     @allure.title('Sorozatos sikeres cikk hozzáadása article_data.csv fájlból')
-    def test_register_positive(self):
+    def test_new_article_positive(self):
         self.home_without_login.sign_in_link().click()
         page = pom.ConduitSignInPage(driver=self.modal.driver)
         page.email_input().send_keys('foltos_cica23@gmail.com')
