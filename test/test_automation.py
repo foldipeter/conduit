@@ -24,31 +24,33 @@ Todo:
     [ ] Új adat bevitel (X db negetív és Y db pozitív)
     [ ] Ismételt és sorozatos adatbevitel adatforrásból (X db negetív és Y db pozitív)
     [ ] Meglévő adat módosítás (5 db negatív és 5 db pozitív)
-        [ ] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
+        [X] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
                      profilkép hivatkozásának nem megadása miatt.
-        [ ] TC_015 - Korábban regisztrált felhasználó fiók profilképének sikeres megváltoztatatása.
-        [ ] TC_016 - Korábban regisztrált felhasználó felhasználónevévek sikertelen megváltoztatatása
+        [X] TC_015 - Korábban regisztrált felhasználó fiók profilképének sikeres megváltoztatatása.
+        [X] TC_016 - Korábban regisztrált felhasználó felhasználónevévek sikertelen megváltoztatatása
                      név nem megadása miatt.
-        [ ] TC_017 - Korábban regisztrált felhasználó felhasználónevének sikeres megváltoztatatása.
+        [X] TC_017 - Korábban regisztrált felhasználó felhasználónevének sikeres megváltoztatatása.
         [ ] TC_018 - Korábban regisztrált felhasználó felhasználónevévek sikertelen megváltoztatatása
                      már létező név miatt. # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
-        [ ] TC_019 - Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása
+        [X] TC_019 - Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása
                      email cím mező üresen hagyása miatt.
-        [ ] TC_020 - Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása
-                     már létező email cím  miatt.
+        [X] TC_020 - Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása
+                     már létező email cím miatt.
         [ ] TC_021 - Korábban regisztrált felhasználó email címének sikeres megváltoztatatása.
                      # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
-        [ ] TC_022 - Korábban regisztrált felhasználói fiók jelszavának sikeres megváltoztatása.
-        [ ] TC_023 - Korábban már regisztrált felhasználói fiók bemutatkozásának sikeres módosítása.
+        [X] TC_022 - Korábban regisztrált felhasználói fiók jelszavának sikeres megváltoztatása.
+        [X] TC_023 - Korábban már regisztrált felhasználói fiók bemutatkozásának sikeres módosítása.
     [ ] Adat vagy adatok törlése (X db negetív és Y db pozitív)
     [ ] Adatok lementése felületről (X db negetív és Y db pozitív)
     [ ] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
         [X] TC013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
 """
+import time
 
 import page_object_model as pom
 import configuration_chrome_driver as conf_driver
 import allure
+from selenium.webdriver.common.keys import Keys
 
 
 class TestRegistration:
@@ -206,3 +208,119 @@ class TestLogout:
         self.page.log_out_link().click()
         self.page = pom.ConduitHomePageWithoutLogin(self.page.driver)
         assert self.page.sign_in_link().is_displayed()
+
+
+class TestEditProfile:
+
+    def setup_method(self):
+        driver = conf_driver.get_chrome_driver(remote=True)
+        page = pom.ConduitSignInPage(driver=driver)
+        page.open(url='http://localhost:1667/#/login')
+        page.email_input().send_keys('piros_cica23@gmail.com')
+        page.password_input().send_keys('Piroska23')
+        page.sign_in().click()
+        page = pom.ConduitHomePageWithLogin(driver=driver)
+        page.settings_link().click()
+        self.page = pom.ConduitSettingsPage(driver=driver)
+        self.page.title()
+        self.modal = pom.ConduitGeneralModalWindow(driver=driver)
+
+    def teardown_method(self):
+        self.page.close()
+
+    @allure.id('TC_014')
+    @allure.title('Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása' +
+                  ' profilkép hivatkozásánaknem megadása miatt.')
+    def test_profile_picture_negative(self):
+        while len(self.page.profile_picture_input().get_attribute('value')) > 0:
+            self.page.profile_picture_input().send_keys(Keys.BACKSPACE)
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update failed!'
+        assert self.modal.text().text == 'Image field required.'
+
+    @allure.id('TC_015')
+    @allure.title('Korábban regisztrált felhasználó fiók profilképének sikeres megváltoztatatása.')
+    def test_profile_picture_positive(self):
+        self.page.profile_picture_input().clear()
+        self.page.profile_picture_input().send_keys('https://cdn-icons-png.flaticon.com/512/9327/9327067.png')
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update successful!'
+        self.modal.ok().click()
+        page = pom.ConduitHomePageWithLogin(driver=self.page.driver)
+        page.username_link().click()
+        page = pom.ConduitProfilePage(driver=page.driver)
+        assert page.profile_picture().get_attribute('src') == 'https://cdn-icons-png.flaticon.com/512/9327/9327067.png'
+
+    @allure.id('TC_016')
+    @allure.title(
+        'Korábban regisztrált felhasználó felhasználónevévek sikertelen megváltoztatatása név nem megadása miatt.')
+    def test_profile_username_negative(self):
+        while len(self.page.username_input().get_attribute('value')) > 0:
+            self.page.username_input().send_keys(Keys.BACKSPACE)
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update failed!'
+        assert self.modal.text().text == 'Username field required.'
+
+    @allure.id('TC_017')
+    @allure.title('Korábban regisztrált felhasználó felhasználónevének sikeres megváltoztatatása.')
+    def test_profile_username_positive(self):
+        self.page.username_input().clear()
+        self.page.username_input().send_keys('VorosMacska23')
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update successful!'
+        self.modal.ok().click()
+        page = pom.ConduitHomePageWithLogin(driver=self.page.driver)
+        page.username_link().click()
+        page = pom.ConduitProfilePage(driver=page.driver)
+        assert page.profile_name().text == "VorosMacska23"
+
+    @allure.id('TC_019')
+    @allure.title('Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása' +
+                  'email cím mező üresen hagyása miatt.')
+    def test_profile_email_negative(self):
+        while len(self.page.email_input().get_attribute('value')) > 0:
+            self.page.email_input().send_keys(Keys.BACKSPACE)
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update failed!'
+        assert self.modal.text().text == 'Email field required.'
+
+    @allure.id('TC_020')
+    @allure.title(
+        'Korábban regisztrált felhasználó email címének sikertelen megváltoztatatása már létező email cím miatt.')
+    def test_profile_email_negative(self):
+        self.page.email_input().clear()
+        self.page.email_input().send_keys('testuser1@example.com')
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update failed!'
+        assert self.modal.text().text == 'Email already taken.'
+
+    @allure.id('TC_023')
+    @allure.title('Korábban már regisztrált felhasználói fiók bemutatkozásának sikeres módosítása.')
+    def test_profile_bio_positive(self):
+        self.page.bio_textarea().clear()
+        self.page.bio_textarea().send_keys('Szeretem a piros gombolyagokat.')
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update successful!'
+        self.modal.ok().click()
+        page = pom.ConduitHomePageWithLogin(driver=self.page.driver)
+        page.username_link().click()
+        page = pom.ConduitProfilePage(driver=page.driver)
+        assert page.profile_bio().text == "Szeretem a piros gombolyagokat."
+
+    @allure.id('TC_022')
+    @allure.title('Korábban regisztrált felhasználói fiók jelszavának sikeres megváltoztatása.')
+    def test_profile_password_positive(self):
+        self.page.password_input().send_keys('PirosCica23')
+        self.page.update_settings().click()
+        assert self.modal.title().text == 'Update successful!'
+        self.modal.ok().click()
+        page = pom.ConduitHomePageWithLogin(driver=self.page.driver)
+        page.log_out_link().click()
+        page = pom.ConduitHomePageWithoutLogin(self.page.driver)
+        page.sign_in_link().click()
+        page = pom.ConduitSignInPage(self.page.driver)
+        page.email_input().send_keys('piros_cica23@gmail.com')
+        page.password_input().send_keys('PirosCica23')
+        page.sign_in().click()
+        page = pom.ConduitHomePageWithLogin(self.page.driver)
+        assert page.username_link().text == 'VorosMacska23'

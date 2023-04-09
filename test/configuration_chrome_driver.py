@@ -24,6 +24,7 @@ def get_chrome_driver(remote=True) -> Chrome:
     Returns:
         Chrome: configurated Selenium Chrome webdriver
     """
+
     options = Options()
     options.add_experimental_option('detach', True)
     if remote:

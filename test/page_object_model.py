@@ -5,15 +5,16 @@ This module contains the objects that represent the fronted of Conduit.
 Todo:
     [x] General page object model
     [ ] Conduit home page model
-        [X] Without login
+        [ ] Without login
         [ ] With login
     [X] General modal window model
     [x] Conduit sign in page model
     [x] Conduit sign up page model
-    [ ] Conduit setting page model
+    [x] Conduit settings page model
     [ ] Conduit new article page model
     [ ] Conduit profil page model
     [ ] Conduit article page model
+    ...
 """
 
 from selenium.webdriver import Chrome
@@ -138,6 +139,15 @@ class ConduitHomePageWithLogin(GeneralPage):
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Log out")]')))
 
+    def settings_link(self) -> WebElement:
+        """Get settings link from Conduit home page
+
+        Returns:
+            WebElement: log out link
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "Settings")]')))
+
 
 class ConduitSignInPage(GeneralPage):
     """Conduit sign in page model
@@ -259,3 +269,113 @@ class ConduitSignUpPage(GeneralPage):
             WebElement: sign in button
         """
         return self.driver.find_element(By.XPATH, '//button[contains(text(), "Sign up")]')
+
+
+class ConduitSettingsPage(GeneralPage):
+    """Conduit settings page model
+
+        Conduit settings page model from general page model.
+
+        Arguments:
+            driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver)
+
+    def title(self):
+        """Get title from Conduit home page
+        Use for waiting loaded page
+
+        Returns:
+            WebElement: title
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//h1[contains(text(), "Settings")]')))
+
+    def profile_picture_input(self) -> WebElement:
+        """Get profil picture input from Conduit settings page
+
+        Returns:
+            WebElement: profile picture input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="text"][contains(@placeholder, "profile picture")]')
+
+    def username_input(self) -> WebElement:
+        """Get username input from Conduit settings page
+
+        Returns:
+            WebElement: username input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="text"][contains(@placeholder, "username")]')
+
+    def bio_textarea(self) -> WebElement:
+        """Get bio textarea from Conduit settings page
+
+        Returns:
+            WebElement: textarea input
+        """
+        return self.driver.find_element(By.XPATH, '//textarea[contains(@placeholder, "bio")]')
+
+    def email_input(self) -> WebElement:
+        """Get email input from Conduit settings page
+
+        Returns:
+            WebElement: email input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="text"][contains(@placeholder, "Email")]')
+
+    def password_input(self) -> WebElement:
+        """Get password input from Conduit settings page
+
+        Returns:
+            WebElement: password input
+        """
+        return self.driver.find_element(By.XPATH, '//input[@type="password"][contains(@placeholder, "Password")]')
+
+    def update_settings(self) -> WebElement:
+        """Get update settings button from Conduit sign up page
+
+        Returns:
+            WebElement: update settings button
+        """
+        return self.driver.find_element(By.XPATH, '//button[contains(text(), "Update Settings")]')
+
+
+class ConduitProfilePage(GeneralPage):
+    """Conduit profile page model
+
+    Conduit profile page model from general page model.
+
+    Arguments:
+        driver (Chrome): Selenium Chrome webdriver
+        """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver)
+
+    def profile_picture(self):
+        """Get profil picture img from Conduit home page
+
+        Returns:
+            WebElement: profile picture img
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.CLASS_NAME, 'user-img')))
+
+    def profile_name(self):
+        """Get profil name header from Conduit home page
+
+        Returns:
+            WebElement: profile name header
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="user-info"]//h4')))
+    def profile_bio(self):
+        """Get profile bio paragraph from Conduit home page
+
+        Returns:
+            WebElement: profile bio paragraph
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//*[@class="user-info"]//p')))
