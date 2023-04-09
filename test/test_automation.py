@@ -2,27 +2,28 @@
 
 Todo:
     [ ] Regisztráció (5 db negatív és 1 db pozitív)
-        [X] TC001 - Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.
-        [X] TC002 - Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.
-        [X] TC003 - Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.
-        [X] TC004 - Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.
-        [X] TC005 - Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.
-        [ ] TC006 - Új felhasználó fiók sikertelen létrehozása már létező név megadásával.
+        [X] TC_001 - Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.
+        [X] TC_002 - Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.
+        [X] TC_003 - Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.
+        [X] TC_004 - Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.
+        [X] TC_005 - Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.
+        [ ] TC_006 - Új felhasználó fiók sikertelen létrehozása már létező név megadásával.
                     # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
     [X] Bejelentkezés (4 db negatív és 1 db pozitív)
-        [X] TC008 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés
+        [X] TC_008 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés
                     jelszó mező üresen hagyása miatt.
-        [X] TC009 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés
+        [X] TC_009 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés
                     email cím mező üresen hagyása miatt.
-        [X] TC010 - Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.
-        [X] TC011 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.
-        [X] TC012 - Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.
+        [X] TC_010 - Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.
+        [X] TC_011 - Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.
+        [X] TC_012 - Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.
     [ ] Adatkezelési nyilatkozat használata (0 db negatív és 1 db pozitív) # negatív teszteset?
-        [X] TC007 - Adatkezelési tájékoztató sikeres elfogadása.
+        [X] TC_007 - Adatkezelési tájékoztató sikeres elfogadása.
     [ ] Adatok listázása (X db negetív és Y db pozitív)
     [ ] Több oldalas lista bejárása (X db negetív és Y db pozitív)
     [ ] Új adat bevitel (X db negetív és Y db pozitív)
-    [ ] Ismételt és sorozatos adatbevitel adatforrásból (X db negetív és Y db pozitív)
+    [ ] Ismételt és sorozatos adatbevitel adatforrásból (X db negetív és 1 db pozitív)
+        [ ] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
     [ ] Meglévő adat módosítás (5 db negatív és 5 db pozitív)
         [X] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
                      profilkép hivatkozásának nem megadása miatt.
@@ -43,10 +44,10 @@ Todo:
     [ ] Adat vagy adatok törlése (X db negetív és Y db pozitív)
     [ ] Adatok lementése felületről (X db negetív és Y db pozitív)
     [ ] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
-        [X] TC013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
+        [X] TC_013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
 """
-import time
 
+import csv
 import page_object_model as pom
 import configuration_chrome_driver as conf_driver
 import allure
@@ -64,7 +65,7 @@ class TestRegistration:
     def teardown_method(self):
         self.page.close()
 
-    @allure.id('TC001')
+    @allure.id('TC_001')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos felhasználónév megadásával.')
     def test_register_negative_username(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
@@ -73,7 +74,7 @@ class TestRegistration:
         assert self.modal.title().text == 'Registration failed!'
         assert self.modal.text().text == 'Username field required.'
 
-    @allure.id('TC002')
+    @allure.id('TC_002')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos email cím megadásával.')
     def test_register_negative_email(self):
         self.page.username_input().send_keys('PirosCica23')
@@ -82,7 +83,7 @@ class TestRegistration:
         assert self.modal.title().text == 'Registration failed!'
         assert self.modal.text().text == 'Email field required.'
 
-    @allure.id('TC003')
+    @allure.id('TC_003')
     @allure.title('Új felhasználó fiók sikertelen létrehozása hiányos jelszó megadásával.')
     def test_register_negative_password(self):
         self.page.username_input().send_keys('PirosCica23')
@@ -91,7 +92,7 @@ class TestRegistration:
         assert self.modal.title().text == 'Registration failed!'
         assert self.modal.text().text == 'Password field required.'
 
-    @allure.id('TC004')
+    @allure.id('TC_004')
     @allure.title('Új felhasználó fiók sikeres létrehozása megfelelő adatok megadásával.')
     def test_register_positive(self):
         self.page.username_input().send_keys('PirosCica23')
@@ -104,7 +105,7 @@ class TestRegistration:
         page = pom.ConduitHomePageWithLogin(self.page.driver)
         assert page.username_link().text == 'PirosCica23'
 
-    @allure.id('TC005')
+    @allure.id('TC_005')
     @allure.title('Új felhasználó fiók sikertelen létrehozása már regisztrált email cím megadásával.')
     def test_register_negative_exists(self):
         self.page.username_input().send_keys('PirosCica23')
@@ -124,7 +125,7 @@ class TestPrivacyPolicy:
     def teardown_method(self):
         self.page.close()
 
-    @allure.id('TC007')
+    @allure.id('TC_007')
     @allure.title('Adatkezelési tájékoztató sikeres elfogadása.')
     def test_accept_cookie(self):
         self.page.accept_cookie(in_list=False).click()
@@ -142,7 +143,7 @@ class TestLogin:
     def teardown_method(self):
         self.page.close()
 
-    @allure.id('TC008')
+    @allure.id('TC_008')
     @allure.title(
         'Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés jelszó mező üresen hagyása miatt.')
     def test_login_negative_password(self):
@@ -151,7 +152,7 @@ class TestLogin:
         assert self.modal.title().text == 'Login failed!'
         assert self.modal.text().text == 'Password field required.'
 
-    @allure.id('TC009')
+    @allure.id('TC_009')
     @allure.title(
         'Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés email cím mező üresen hagyása miatt.')
     def test_login_negative_email(self):
@@ -160,7 +161,7 @@ class TestLogin:
         assert self.modal.title().text == 'Login failed!'
         assert self.modal.text().text == 'Email field required.'
 
-    @allure.id('TC010')
+    @allure.id('TC_010')
     @allure.title('Korábban még nem regisztrált felhasznói fiókkal történő sikertelen bejelentkezés.')
     def test_login_negative_registered(self):
         self.page.email_input().send_keys('piros_cica24@gmail.com')
@@ -169,7 +170,7 @@ class TestLogin:
         assert self.modal.title().text == 'Login failed!'
         assert self.modal.text().text == 'Invalid user credentials.'
 
-    @allure.id('TC011')
+    @allure.id('TC_011')
     @allure.title('Korábban regisztrált felhasznói fiókkal történő sikertelen bejelentkezés hibás jelszó miatt.')
     def test_login_negative_wrong(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
@@ -178,7 +179,7 @@ class TestLogin:
         assert self.modal.title().text == 'Login failed!'
         assert self.modal.text().text == 'Invalid user credentials.'
 
-    @allure.id('TC012')
+    @allure.id('TC_012')
     @allure.title('Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.')
     def test_login_positive(self):
         self.page.email_input().send_keys('piros_cica23@gmail.com')
@@ -202,7 +203,7 @@ class TestLogout:
     def teardown_method(self):
         self.page.close()
 
-    @allure.id('TC013')
+    @allure.id('TC_013')
     @allure.title('Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.')
     def test_logout_positive(self):
         self.page.log_out_link().click()
@@ -324,3 +325,34 @@ class TestEditProfile:
         page.sign_in().click()
         page = pom.ConduitHomePageWithLogin(self.page.driver)
         assert page.username_link().text == 'VorosMacska23'
+
+
+class TestRepeatedInputFromSource:
+
+    def setup_method(self):
+        driver = conf_driver.get_chrome_driver(remote=True)
+        self.registration = pom.ConduitSignUpPage(driver=driver)
+        self.modal = pom.ConduitGeneralModalWindow(driver=driver)
+        self.home_with_login = pom.ConduitHomePageWithLogin(driver=driver)
+        self.home_without_login = pom.ConduitHomePageWithoutLogin(driver=driver)
+        self.home_without_login.open(url='http://localhost:1667/#/')
+
+    def teardown_method(self):
+        self.registration.close()
+
+    @allure.id('ATC_01')
+    @allure.title('Sorozatos sikeres regisztráció user_data.csv fájlból')
+    def test_register_positive(self):
+        with open('./user_data.csv', mode='r') as user_data_csv:
+            csv_reader = csv.DictReader(user_data_csv)
+            for record in csv_reader:
+                self.home_without_login.sign_up_link().click()
+                self.registration.username_input().send_keys(record['username'])
+                self.registration.email_input().send_keys(record['email'])
+                self.registration.password_input().send_keys(record['password'])
+                self.registration.sign_up().click()
+                assert self.modal.title().text == 'Welcome!'
+                assert self.modal.text().text == 'Your registration was successful!'
+                self.modal.ok().click()
+                assert self.home_with_login.username_link().text == record['username']
+                self.home_with_login.log_out_link().click()
