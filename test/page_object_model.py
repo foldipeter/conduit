@@ -3,13 +3,17 @@
 This module contains the objects that represent the fronted of Conduit.
 
 Todo:
-    [ ] Completing this list
     [x] General page object model
-    [x] Conduit home page model
+    [ ] Conduit home page model
+        [X] Without login
+        [ ] With login
+    [X] General modal window model
     [x] Conduit sign in page model
     [x] Conduit sign up page model
-    ...
-
+    [ ] Conduit setting page model
+    [ ] Conduit new article page model
+    [ ] Conduit profil page model
+    [ ] Conduit article page model
 """
 
 from selenium.webdriver import Chrome
@@ -170,8 +174,21 @@ class ConduitSignInPage(GeneralPage):
         """
         return self.driver.find_element(By.XPATH, '//button[contains(text(), "Sign in")]')
 
+
+class ConduitGeneralModalWindow(GeneralPage):
+    """Conduit general modal window model
+
+        Conduit general modal window model from general page model for pop up messages.
+
+        Arguments:
+            driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver, url='')
+
     def modal_title(self) -> WebElement:
-        """Get title from Conduit sign in page modal pop up
+        """Get title from Conduit modal pop up
 
         Returns:
             WebElement: modal title
@@ -180,7 +197,7 @@ class ConduitSignInPage(GeneralPage):
             expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-title')))
 
     def modal_text(self) -> WebElement:
-        """Get text from Conduit sign in page modal pop up
+        """Get text from Conduit modal pop up
 
         Returns:
             WebElement: modal text
@@ -189,7 +206,7 @@ class ConduitSignInPage(GeneralPage):
             expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-text')))
 
     def modal_ok(self) -> WebElement:
-        """Get ok button from Conduit sign in page modal pop up
+        """Get ok button from Conduit modal pop up
 
         Returns:
             WebElement: ok button
@@ -241,30 +258,3 @@ class ConduitSignUpPage(GeneralPage):
             WebElement: sign in button
         """
         return self.driver.find_element(By.XPATH, '//button[contains(text(), "Sign up")]')
-
-    def modal_title(self) -> WebElement:
-        """Get title from Conduit sign up page modal pop up
-
-        Returns:
-            WebElement: modal title
-        """
-        return self.driverWait.until(
-            expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-title')))
-
-    def modal_text(self) -> WebElement:
-        """Get text from Conduit sign up page modal pop up
-
-        Returns:
-            WebElement: modal text
-        """
-        return self.driverWait.until(
-            expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'swal-text')))
-
-    def modal_ok(self) -> WebElement:
-        """Get ok button from Conduit sign up page modal pop up
-
-        Returns:
-            WebElement: ok button
-        """
-        return self.driverWait.until(
-            expected_conditions.element_to_be_clickable((By.CLASS_NAME, 'swal-button')))
