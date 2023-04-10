@@ -385,8 +385,8 @@ class TestRepeatedInputFromSource:
         page.password_input().send_keys('FoltosCica23')
         page.sign_in().click()
         assert self.home_with_login.username_link().text == 'FoltosCica23'
-        with open('./test/article_data.csv', mode='r', encoding='utf-8-sig') as user_data_csv:
-            csv_reader = csv.DictReader(user_data_csv, delimiter=";")
+        with open('./test/article_data.tsv', mode='r', encoding='utf-8-sig') as user_data_csv:
+            csv_reader = csv.DictReader(user_data_csv, delimiter="\t")
             for record in csv_reader:
                 self.home_with_login.new_article_link().click()
                 self.new_article.title_input().send_keys(record['title'])
