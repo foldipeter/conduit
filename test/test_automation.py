@@ -431,8 +431,8 @@ class TestWriteAndDeleteArticle:
         self.new_article.title_input().send_keys('Te milyen cica vagy?')
         self.new_article.about_input().send_keys('Cicák fajtái')
         self.new_article.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
-                                               '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
-                                               '**Írd meg kommentben a fentiek közül!**')
+                                                      '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
+                                                      '**Írd meg kommentben a fentiek közül!**')
         tags = ['cica', 'kerdes', 'valasz']
         for tag in tags:
             self.new_article.tags_input().send_keys(tag)
@@ -449,8 +449,8 @@ class TestWriteAndDeleteArticle:
         self.new_article.title_input().clear()
         self.new_article.about_input().send_keys('Cicák fajtái')
         self.new_article.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
-                                               '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
-                                               '**Írd meg kommentben a fentiek közül!**')
+                                                      '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
+                                                      '**Írd meg kommentben a fentiek közül!**')
         titles = ['cica', 'kerdes', 'valasz']
         for title in titles:
             self.new_article.tags_input().send_keys(title)
@@ -472,5 +472,8 @@ class TestWriteAndDeleteArticle:
         self.page.username_link().click()
         profile_page.profile_name()
         links = profile_page.preview_links()
-        link = list(filter(lambda element: element.text == 'Te milyen cica vagy?', links))
-        assert len(link) == 0
+        if len(links) > 0:
+            link = list(filter(lambda element: element.text == 'Te milyen cica vagy?', links))
+            assert len(link) == 0
+        else:
+            assert len(links) == 0
