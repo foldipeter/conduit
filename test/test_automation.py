@@ -509,6 +509,7 @@ class TestListAndSaveData:
     def test_collect_my_articles_positive(self):
         self.page.username_link().click()
         self.profile.profile_name()
+        self.pagination.active_page_number()
         page_numbers = self.pagination.pagination_link()
         current_page = 0
         for page in page_numbers:
