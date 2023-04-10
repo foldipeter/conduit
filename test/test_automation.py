@@ -29,7 +29,7 @@ Todo:
                      már létező cikk cím miatt. # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
     [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 2 db pozitív)
         [X] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
-        [ ] ATC_02 - Sorozatos sikeres cikk hozzáadása article_data.csv fájlból
+        [ ] ATC_02 - Sorozatos sikeres cikk hozzáadása article_data.tsv fájlból
     [ ] Meglévő adat módosítás (7 db negatív és 10 db pozitív)
         [X] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
                      profilkép hivatkozásának nem megadása miatt.
@@ -377,7 +377,7 @@ class TestRepeatedInputFromSource:
                 self.home_with_login.log_out_link().click()
 
     @allure.id('ATC_02')
-    @allure.title('Sorozatos sikeres cikk hozzáadása article_data.csv fájlból')
+    @allure.title('Sorozatos sikeres cikk hozzáadása article_data.tsv fájlból')
     def test_new_article_positive(self):
         self.home_without_login.sign_in_link().click()
         page = pom.ConduitSignInPage(driver=self.modal.driver)
