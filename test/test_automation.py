@@ -19,8 +19,10 @@ Todo:
         [X] TC_012 - Korábban regisztrált felhasznói fiókkal történő sikeres bejelentkezés.
     [X] Adatkezelési nyilatkozat használata (0 db negatív és 1 db pozitív) # negatív teszteset?
         [X] TC_007 - Adatkezelési tájékoztató sikeres elfogadása.
-    [ ] Adatok listázása (0 db negetív és 0 db pozitív)
-    [ ] Több oldalas lista bejárása (0 db negetív és 0 db pozitív)
+    [X] Adatok listázása (0 db negetív és 1 db pozitív) # negatív teszteset?
+        [X] ATC_03 - Népszerű címkék sikeres listázása címkefelhőből
+    [X] Több oldalas lista bejárása (0 db negetív és 1 db pozitív) # negatív teszteset?
+        [X] ATC_04 - Felhasználó saját cikkjeinek sikeres bejárása
     [?] Új adat bevitel (3 db negetív és 2 db pozitív)
         [X] TC_024 - Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.
         [X] TC_025 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
@@ -30,9 +32,9 @@ Todo:
         [?] TC_035 - Korábban létrehozott cikkhez történő sikertelen hozzászólás írása, hiányzó szöveg miatt.
                      # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
         [ ] TC_036 - Korábban létrehozott cikkhez történő sikeres hozzászólás írása.
-    [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 2 db pozitív)
+    [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 2 db pozitív) # negatív teszteset?
         [X] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
-        [ ] ATC_02 - Sorozatos sikeres cikk hozzáadása article_data.tsv fájlból
+        [X] ATC_02 - Sorozatos sikeres cikk hozzáadása article_data.tsv fájlból
     [ ] Meglévő adat módosítás (7 db negatív és 10 db pozitív)
         [X] TC_014 - Korábban regisztrált felhasználó fiók profilképének sikertelen megváltoztatatása
                      profilkép hivatkozásának nem megadása miatt.
@@ -60,10 +62,11 @@ Todo:
         [ ] TC_032 - Korábban létrehozott cikk címkéinek sikeres módosítása.
         [ ] TC_033 - Korábban létrehozott cikk sikeres módosítása változatlan adatokkal.
                      # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
-    [ ] Adat vagy adatok törlése (0 db negetív és 2 db pozitív)
+    [ ] Adat vagy adatok törlése (0 db negetív és 2 db pozitív) # negatív teszteset?
         [X] TC_034 - Korábban létrehozott cikk sikeres törlése.
         [ ] TC_037 - Korábban létrehozott cikk alatt szereplő hozzászólás sikeres törlése.
-    [ ] Adatok lementése felületről (0 db negetív és 0 db pozitív)
+    [X] Adatok lementése felületről (0 db negetív és 1 db pozitív) # negatív teszteset?
+        [X] ATC_05 - Globális hírfolyam cikk címeinek mentése saved_data.tsv fájlba
     [X] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
         [X] TC_013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
 """
@@ -477,3 +480,59 @@ class TestWriteAndDeleteArticle:
             assert len(link) == 0
         else:
             assert len(links) == 0
+
+
+class TestListAndSaveData:
+    def setup_method(self):
+        driver = conf_driver.get_chrome_driver(remote=True)
+        page = pom.ConduitSignInPage(driver=driver)
+        page.open(url='http://localhost:1667/#/login')
+        page.email_input().send_keys('foltos_cica23@gmail.com')
+        page.password_input().send_keys('FoltosCica23')
+        page.sign_in().click()
+        self.page = pom.ConduitHomePageWithLogin(driver=driver)
+        self.profile = pom.ConduitProfilePage(driver=driver)
+        self.pagination = pom.ConduitGeneralPagination(driver=driver)
+        self.page.username_link()
+
+    def teardown_method(self):
+        self.page.close()
+
+    @allure.id('ATC_03')
+    @allure.title('Népszerű címkék sikeres listázása címkefelhőből')
+    def test_collect_tags_positive(self):
+        links = self.page.popular_tags()
+        assert len(links) > 0
+
+    @allure.id('ATC_04')
+    @allure.title('Felhasználó saját cikkjeinek sikeres bejárása')
+    def test_collect_my_articles_positive(self):
+        self.page.username_link().click()
+        self.profile.profile_name()
+        page_numbers = self.pagination.pagination_link()
+        current_page = 0
+        for page in page_numbers:
+            page.click()
+            current_page += 1
+            assert self.pagination.active_page_number().text == str(current_page)
+            articles_link = self.profile.preview_links()
+            assert len(articles_link) > 0
+
+    @allure.id('ATC_05')
+    @allure.title('Globális hírfolyam cikk címeinek mentése saved_data.tsv fájlba')
+    def test_save_global_feed_positive(self):
+        self.pagination.active_page_number()
+        page_numbers = self.pagination.pagination_link()
+        assert len(page_numbers) > 0
+        with open('./test/saved_data.tsv', mode='w', encoding='utf-8', newline='') as csv_file:
+            fieldnames = ['oldalszam', 'cim']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames, delimiter='\t')
+            writer.writeheader()
+            for page in page_numbers:
+                page.click()
+                oldalszam = self.pagination.active_page_number().text
+                self.page.username_link()
+                headers = self.page.articles_header()
+                assert len(headers) > 0
+                for header in headers:
+                    writer.writerow({'oldalszam': oldalszam, 'cim': header.text})

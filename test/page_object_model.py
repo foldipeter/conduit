@@ -157,6 +157,22 @@ class ConduitHomePageWithLogin(GeneralPage):
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//li[@class="nav-item"]/a[contains(text(), "New Article")]')))
 
+    def popular_tags(self) -> list[WebElement]:
+        """Get popular tags link from Conduit home page
+
+        Returns:
+            list[WebElement]: popular tags link in list
+        """
+        return self.driver.find_elements(By.XPATH, '//*[@class="sidebar"]//*[@class="tag-list"]/a')
+
+    def articles_header(self) -> list[WebElement]:
+        """Get articles header from Conduit home page
+
+        Returns:
+            list[WebElement]: articles header in list
+        """
+        return self.driver.find_elements(By.XPATH, '//*[@class="article-preview"]//h1')
+
 
 class ConduitSignInPage(GeneralPage):
     """Conduit sign in page model
@@ -529,3 +545,33 @@ class ConduitArticle(GeneralPage):
         """
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//*[@class="tag-list"]/parent::div/div[not(contains(@class, "tag"))]')))
+
+
+class ConduitGeneralPagination(GeneralPage):
+    """Conduit general pagination page model
+
+    Conduit general pagination page model from general page model.
+
+    Arguments:
+        driver (Chrome): Selenium Chrome webdriver
+    """
+
+    def __init__(self, driver: Chrome):
+        super().__init__(driver=driver)
+
+    def active_page_number(self) -> WebElement:
+        """Get active page number link from Conduit general pagination
+
+        Returns:
+            WebElement: active page number link
+        """
+        return self.driverWait.until(expected_conditions.element_to_be_clickable(
+            (By.XPATH, '//li[@class="page-item active"]/a')))
+
+    def pagination_link(self) -> list[WebElement]:
+        """Get pagination links from Conduit general pagination
+
+        Returns:
+            list[WebElement]: pagination links in list
+        """
+        return self.driver.find_elements(By.CLASS_NAME, 'page-link')
