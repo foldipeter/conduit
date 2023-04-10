@@ -41,7 +41,7 @@ class GeneralPage:
 
     def __init__(self, driver: Chrome):
         self.driver = driver
-        self.driverWait = WebDriverWait(driver=driver, timeout=5)
+        self.driverWait = WebDriverWait(driver=driver, timeout=10)
 
     def open(self, url: str) -> None:
         """Open URL with driver.get method
@@ -364,7 +364,7 @@ class ConduitProfilePage(GeneralPage):
         super().__init__(driver=driver)
 
     def profile_picture(self):
-        """Get profile picture img from Conduit home page
+        """Get profile picture img from Conduit profilepage
 
         Returns:
             WebElement: profile picture img
@@ -373,7 +373,7 @@ class ConduitProfilePage(GeneralPage):
             (By.CLASS_NAME, 'user-img')))
 
     def profile_name(self):
-        """Get profile name header from Conduit home page
+        """Get profile name header from Conduit profile page
 
         Returns:
             WebElement: profile name header
@@ -382,13 +382,21 @@ class ConduitProfilePage(GeneralPage):
             (By.XPATH, '//*[@class="user-info"]//h4')))
 
     def profile_bio(self):
-        """Get profile bio paragraph from Conduit home page
+        """Get profile bio paragraph from Conduit profile page
 
         Returns:
             WebElement: profile bio paragraph
         """
         return self.driverWait.until(expected_conditions.element_to_be_clickable(
             (By.XPATH, '//*[@class="user-info"]//p')))
+
+    def preview_links(self):
+        """Get articles preview links header from Conduit profile page
+
+        Returns:
+            list[WebElement]: preview links header
+        """
+        return self.driver.find_elements(By.XPATH, '//a[@class="preview-link"]/h1')
 
 
 class ConduitNewArticle(GeneralPage):

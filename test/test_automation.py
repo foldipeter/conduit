@@ -403,7 +403,7 @@ class TestRepeatedInputFromSource:
                     assert element.text == tag
 
 
-class TestNewArticle:
+class TestWriteAndDeleteArticle:
 
     def setup_method(self):
         driver = conf_driver.get_chrome_driver(remote=True)
@@ -412,9 +412,10 @@ class TestNewArticle:
         page.email_input().send_keys('piros_cica23@gmail.com')
         page.password_input().send_keys('PirosCica23')
         page.sign_in().click()
-        page = pom.ConduitHomePageWithLogin(driver=driver)
-        page.new_article_link().click()
-        self.page = pom.ConduitNewArticle(driver=driver)
+        self.page = pom.ConduitHomePageWithLogin(driver=driver)
+        self.page.new_article_link().click()
+        self.new_article = pom.ConduitNewArticle(driver=driver)
+        self.article = pom.ConduitArticle(driver=driver)
         self.modal = pom.ConduitGeneralModalWindow(driver=driver)
 
     def teardown_method(self):
@@ -423,33 +424,48 @@ class TestNewArticle:
     @allure.id('TC_024')
     @allure.title('Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.')
     def test_new_article_positive(self):
-        self.page.title_input().send_keys('Te milyen cica vagy?')
-        self.page.about_input().send_keys('Cicák fajtái')
-        self.page.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
+        self.new_article.title_input().send_keys('Te milyen cica vagy?')
+        self.new_article.about_input().send_keys('Cicák fajtái')
+        self.new_article.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
                                                '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
                                                '**Írd meg kommentben a fentiek közül!**')
         tags = ['cica', 'kerdes', 'valasz']
         for tag in tags:
-            self.page.tags_input().send_keys(tag)
-            self.page.tags_input().send_keys(Keys.ENTER)
-        self.page.publish_article().click()
-        page = pom.ConduitArticle(driver=self.page.driver)
-        assert page.title().text == 'Te milyen cica vagy?'
-        for element, tag in zip(page.tag_list(), tags):
+            self.new_article.tags_input().send_keys(tag)
+            self.new_article.tags_input().send_keys(Keys.ENTER)
+        self.new_article.publish_article().click()
+        assert self.article.title().text == 'Te milyen cica vagy?'
+        for element, tag in zip(self.article.tag_list(), tags):
             assert element.text == tag
 
     @allure.id('TC_025')
     @allure.title(
         'Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása cikk címének hiánya miatt.')
     def test_new_article_negative(self):
-        self.page.title_input().clear()
-        self.page.about_input().send_keys('Cicák fajtái')
-        self.page.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
+        self.new_article.title_input().clear()
+        self.new_article.about_input().send_keys('Cicák fajtái')
+        self.new_article.article_textarea().send_keys('# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n' +
                                                '- Hosszú szőrű fajták\n- Hibrid fajták\n\n' +
                                                '**Írd meg kommentben a fentiek közül!**')
         titles = ['cica', 'kerdes', 'valasz']
         for title in titles:
-            self.page.tags_input().send_keys(title)
-            self.page.tags_input().send_keys(Keys.ENTER)
-        self.page.publish_article().click()
+            self.new_article.tags_input().send_keys(title)
+            self.new_article.tags_input().send_keys(Keys.ENTER)
+        self.new_article.publish_article().click()
         assert self.modal.title().text == 'Oops!'
+
+    @allure.id('TC_034')
+    @allure.title('Korábban létrehozott cikk sikeres törlése.')
+    def test_delete_article_positive(self):
+        self.page.username_link().click()
+        profile_page = pom.ConduitProfilePage(driver=self.page.driver)
+        profile_page.profile_name()
+        links = profile_page.preview_links()
+        link = list(filter(lambda element: element.text == 'Te milyen cica vagy?', links))
+        assert len(link) == 1
+        link[0].click()
+        self.article.delete_article().click()
+        self.page.username_link().click()
+        links = profile_page.preview_links()
+        link = list(filter(lambda element: element.text == 'Te milyen cica vagy?', links))
+        assert len(link) == 0
