@@ -21,12 +21,15 @@ Todo:
         [X] TC_007 - Adatkezelési tájékoztató sikeres elfogadása.
     [ ] Adatok listázása (0 db negetív és 0 db pozitív)
     [ ] Több oldalas lista bejárása (0 db negetív és 0 db pozitív)
-    [?] Új adat bevitel (1 db negetív és 1 db pozitív)
+    [?] Új adat bevitel (3 db negetív és 2 db pozitív)
         [X] TC_024 - Korábban már regisztrált felhasználói fiókkal új cikk sikeres létrehozása.
         [X] TC_025 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
                      cikk címének hiánya miatt.
         [?] TC_026 - Korábban már regisztrált felhasználói fiókkal új cikk sikertelen létrehozása
                      már létező cikk cím miatt. # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
+        [?] TC_035 - Korábban létrehozott cikkhez történő sikertelen hozzászólás írása, hiányzó szöveg miatt.
+                     # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
+        [ ] TC_036 - Korábban létrehozott cikkhez történő sikeres hozzászólás írása.
     [X] Ismételt és sorozatos adatbevitel adatforrásból (0 db negetív és 2 db pozitív)
         [X] ATC_01 - Sorozatos sikeres regisztráció user_data.csv fájlból
         [ ] ATC_02 - Sorozatos sikeres cikk hozzáadása article_data.tsv fájlból
@@ -57,8 +60,9 @@ Todo:
         [ ] TC_032 - Korábban létrehozott cikk címkéinek sikeres módosítása.
         [ ] TC_033 - Korábban létrehozott cikk sikeres módosítása változatlan adatokkal.
                      # Manuálisan elbukik a teszt, ezért kihagyhatom az automatikusból?
-    [ ] Adat vagy adatok törlése (0 db negetív és 1 db pozitív)
-        [ ] TC_034 - Korábban létrehozott cikk sikeres törlése.
+    [ ] Adat vagy adatok törlése (0 db negetív és 2 db pozitív)
+        [X] TC_034 - Korábban létrehozott cikk sikeres törlése.
+        [ ] TC_037 - Korábban létrehozott cikk alatt szereplő hozzászólás sikeres törlése.
     [ ] Adatok lementése felületről (0 db negetív és 0 db pozitív)
     [X] Kijelentkezés (1 db pozitív 0 db negatív) # negatív teszteset?
         [X] TC_013 - Korábban létrehozott felhasználóval történő bejelentkezés után sikeres kijelentkezés végrehajtása.
@@ -466,6 +470,7 @@ class TestWriteAndDeleteArticle:
         link[0].click()
         self.article.delete_article().click()
         self.page.username_link().click()
+        profile_page.profile_name()
         links = profile_page.preview_links()
         link = list(filter(lambda element: element.text == 'Te milyen cica vagy?', links))
         assert len(link) == 0
