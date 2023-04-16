@@ -108,6 +108,9 @@ Todo:
         [X] click_next_pagination_link
     [ ] General feed
         [X] articles_header
+        [X] get_last_article_header
+        [X] get_specific_article_header
+        [X] click_specific_article_header
         [ ] ... username, date, tags, read more, about, favorite
     [ ] etc more model...
 """

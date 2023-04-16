@@ -466,10 +466,12 @@ class TestWriteAndDeleteArticle:
     @allure.title('Korábban létrehozott cikk sikeres törlése.')
     def test_delete_article_positive(self):
         self.page.click_username_link()
+        self.page.get_username_link()
         feed = pom.ConduitGeneralFeed(driver_source=self.page)
         assert feed.get_specific_article_header(text='Te milyen cica vagy?') is not None
         feed.click_specific_article_header(text='Te milyen cica vagy?')
         self.article.click_delete_article()
+        self.page.get_username_link()
         self.page.click_username_link()
         assert feed.get_specific_article_header(text='Te milyen cica vagy?') is None
 
