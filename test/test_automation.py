@@ -519,7 +519,7 @@ class TestListAndSaveData:
             articles = self.feed.get_articles_header()
             assert len(articles) > 0
             if self.pagination.click_next_pagination_link() is False:
-                break;
+                break
 
     @allure.id('ATC_05')
     @allure.title('Globális hírfolyam cikk címeinek mentése saved_data.tsv fájlba')
