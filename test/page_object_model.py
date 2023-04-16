@@ -1303,11 +1303,23 @@ class ConduitGeneralFeed(GeneralPage):
 
         return self.find_elements(By.XPATH, '//*[@class="article-preview"]//h1')
 
-    def get_last_articles_header(self) -> WebElement | None:
-        """Get last articles header from Conduit page
+    def get_last_article_header(self) -> WebElement | None:
+        """Get last article header from Conduit page
 
         Returns:
             WebElement | None: last articles header in list
         """
 
         return self.find_element(By.XPATH, '//*[@class="article-preview"][last()]//h1')
+
+    def get_specific_article_header(self, text: str) -> WebElement | None:
+        """Get specific article header witch contains text from Conduit page
+
+        Arguments:
+            text (str): text what must be contained the header
+
+        Returns:
+            WebElement | None: last articles header in list
+        """
+
+        return self.find_element(By.XPATH, f'//*[@class="article-preview"]//h1[contains(text(),"{text}")]')

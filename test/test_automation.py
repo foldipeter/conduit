@@ -72,8 +72,6 @@ Todo:
 """
 
 import csv
-import time
-
 import page_object_model as pom
 import configuration_chrome_driver as conf_driver
 import allure
@@ -469,18 +467,13 @@ class TestWriteAndDeleteArticle:
     def test_delete_article_positive(self):
         self.page.click_username_link()
         feed = pom.ConduitGeneralFeed(driver_source=self.page)
-        feed.get_last_articles_header()
-        articles = feed.get_articles_header()
-        articles = list(filter(lambda element: element.text == 'Te milyen cica vagy?', articles))
-        assert len(articles) == 1
-        articles[0].click()
+        articles = feed.get_specific_article_header('Te milyen cica vagy?')
+        assert articles is not None
+        articles.click()
         self.article.click_delete_article()
         self.page.click_username_link()
-        feed.get_last_articles_header()
-        articles = feed.get_articles_header()
-        if len(articles) > 0:
-            articles = list(filter(lambda element: element.text == 'Te milyen cica vagy?', articles))
-        assert len(articles) == 0
+        articles = feed.get_specific_article_header('Te milyen cica vagy?')
+        assert articles is None
 
 
 class TestListAndSaveData:
