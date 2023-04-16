@@ -165,7 +165,6 @@ class GeneralPage:
             list[WebElement]: elements in list if element not found return empty list
         """
         try:
-            self.find_element(by, value, timeout)
             return WebDriverWait(driver=self.driver, timeout=timeout).until(
                 lambda driver: driver.find_elements(by, value))
         except TimeoutException:
@@ -1303,3 +1302,12 @@ class ConduitGeneralFeed(GeneralPage):
         """
 
         return self.find_elements(By.XPATH, '//*[@class="article-preview"]//h1')
+
+    def get_last_articles_header(self) -> WebElement | None:
+        """Get last articles header from Conduit page
+
+        Returns:
+            WebElement | None: last articles header in list
+        """
+
+        return self.find_element(By.XPATH, '//*[@class="article-preview"][last()]//h1')
