@@ -118,6 +118,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -148,7 +149,8 @@ class GeneralPage:
             WebElement | None: element or None if not found
         """
         try:
-            return WebDriverWait(driver=self.driver, timeout=timeout).until(
+            return WebDriverWait(driver=self.driver, timeout=timeout,
+                                 ignored_exceptions=[StaleElementReferenceException]).until(
                 expected_conditions.element_to_be_clickable((by, value)))
         except TimeoutException:
             return None
