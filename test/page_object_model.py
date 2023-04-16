@@ -118,7 +118,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -149,8 +148,7 @@ class GeneralPage:
             WebElement | None: element or None if not found
         """
         try:
-            return WebDriverWait(driver=self.driver, timeout=timeout,
-                                 ignored_exceptions=[StaleElementReferenceException]).until(
+            return WebDriverWait(driver=self.driver, timeout=timeout).until(
                 expected_conditions.element_to_be_clickable((by, value)))
         except TimeoutException:
             return None
@@ -1309,19 +1307,31 @@ class ConduitGeneralFeed(GeneralPage):
         """Get last article header from Conduit page
 
         Returns:
-            WebElement | None: last articles header in list
+            WebElement | None: last articles header
         """
 
         return self.find_element(By.XPATH, '//*[@class="article-preview"][last()]//h1')
 
     def get_specific_article_header(self, text: str) -> WebElement | None:
-        """Get specific article header witch contains text from Conduit page
+        """Get the first specific article header witch contains the given text from Conduit page
 
         Arguments:
             text (str): text what must be contained the header
 
         Returns:
-            WebElement | None: last articles header in list
+            WebElement | None: he first specific article header witch contains the given text
         """
 
         return self.find_element(By.XPATH, f'//*[@class="article-preview"]//h1[contains(text(),"{text}")]')
+
+    def click_specific_article_header(self, text: str) -> None:
+        """Click the first specific article header witch contains the given text on Conduit page
+
+        Arguments:
+            text (str): text what must be contained the header
+
+        Returns:
+            None
+        """
+
+        self.get_specific_article_header(text=text).click()

@@ -467,13 +467,11 @@ class TestWriteAndDeleteArticle:
     def test_delete_article_positive(self):
         self.page.click_username_link()
         feed = pom.ConduitGeneralFeed(driver_source=self.page)
-        articles = feed.get_specific_article_header('Te milyen cica vagy?')
-        assert articles is not None
-        articles.click()
+        assert feed.get_specific_article_header(text='Te milyen cica vagy?') is not None
+        feed.click_specific_article_header(text='Te milyen cica vagy?')
         self.article.click_delete_article()
         self.page.click_username_link()
-        articles = feed.get_specific_article_header('Te milyen cica vagy?')
-        assert articles is None
+        assert feed.get_specific_article_header(text='Te milyen cica vagy?') is None
 
 
 class TestListAndSaveData:
