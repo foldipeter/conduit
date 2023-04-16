@@ -148,7 +148,6 @@ class GeneralPage:
             WebElement | None: element or None if not found
         """
         try:
-            self.find_element(by, value, timeout)
             return WebDriverWait(driver=self.driver, timeout=timeout).until(
                 expected_conditions.element_to_be_clickable((by, value)))
         except TimeoutException:
@@ -166,6 +165,7 @@ class GeneralPage:
             list[WebElement]: elements in list if element not found return empty list
         """
         try:
+            self.find_element(by, value, timeout)
             return WebDriverWait(driver=self.driver, timeout=timeout).until(
                 lambda driver: driver.find_elements(by, value))
         except TimeoutException:
