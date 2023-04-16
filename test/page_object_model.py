@@ -121,6 +121,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -139,13 +140,14 @@ class GeneralPage:
     def __init__(self, driver_source: {'driver': Chrome}):
         self.driver = driver_source.driver
 
-    def find_element(self, by: str, value: str, timeout=10) -> WebElement | None:
+    def find_element(self, by: str, value: str, timeout=10, try_again=2) -> WebElement | None:
         """Find element with waiting
 
         Arguments:
             by (str): By.ID
             value (str): selector
             timeout (int): time out in seconds default is 10s
+            try_again (int): count of how many times try again if stale element reference exception
 
         Returns:
             WebElement | None: element or None if not found
@@ -155,6 +157,11 @@ class GeneralPage:
                 expected_conditions.element_to_be_clickable((by, value)))
         except TimeoutException:
             return None
+        except StaleElementReferenceException:
+            if try_again > 0:
+                return self.find_element(by, value, timeout, try_again - 1)
+            else:
+                return None
 
     def find_elements(self, by: str, value: str, timeout=10) -> list[WebElement]:
         """Find elements with waiting
