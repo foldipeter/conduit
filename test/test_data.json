@@ -1,0 +1,266 @@
+{
+  "Template": {
+    "prerequisites": {
+    },
+    "TestCase": {
+      "data": {
+      },
+      "expected_result": {
+      }
+    }
+  },
+  "Registration": {
+    "TC_001": {
+      "data": {
+        "email": "piros_cica23@gmail.com",
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "title": "Registration failed!",
+        "text": "Username field required."
+      }
+    },
+    "TC_002": {
+      "data": {
+        "username": "PirosCica23",
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "title": "Registration failed!",
+        "text": "Email field required."
+      }
+    },
+    "TC_003": {
+      "data": {
+        "username": "PirosCica23",
+        "email": "piros_cica23@gmail.com"
+      },
+      "expected_result": {
+        "title": "Registration failed!",
+        "text": "Password field required."
+      }
+    },
+    "TC_004": {
+      "data": {
+        "username": "PirosCica23",
+        "email": "piros_cica23@gmail.com",
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "title": "Welcome!",
+        "text": "Your registration was successful!"
+      }
+    },
+    "TC_005": {
+      "data": {
+        "username": "PirosCica23",
+        "email": "piros_cica23@gmail.com",
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "title": "Registration failed!",
+        "text": "Email already taken."
+      }
+    }
+  },
+  "Login": {
+    "TC_008": {
+      "data": {
+        "email": "piros_cica23@gmail.com"
+      },
+      "expected_result": {
+        "title": "Login failed!",
+        "text": "Password field required."
+      }
+    },
+    "TC_009": {
+      "data": {
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "title": "Login failed!",
+        "text": "Email field required."
+      }
+    },
+    "TC_010": {
+      "data": {
+        "email": "piros_cica24@gmail.com",
+        "password": "Piroska24"
+      },
+      "expected_result": {
+        "title": "Login failed!",
+        "text": "Invalid user credentials."
+      }
+    },
+    "TC_011": {
+      "data": {
+        "email": "piros_cica23@gmail.com",
+        "password": "Piroska24"
+      },
+      "expected_result": {
+        "title": "Login failed!",
+        "text": "Invalid user credentials."
+      }
+    },
+    "TC_012": {
+      "data": {
+        "email": "piros_cica23@gmail.com",
+        "password": "Piroska23"
+      },
+      "expected_result": {
+        "username": "PirosCica23"
+      }
+    }
+  },
+  "Logout": {
+    "prerequisites": {
+      "email": "piros_cica23@gmail.com",
+      "password": "Piroska23"
+    }
+  },
+  "EditProfile": {
+    "prerequisites": {
+      "email": "piros_cica23@gmail.com",
+      "password": "Piroska23"
+    },
+    "TC_014": {
+      "data": {
+        "profile_picture": ""
+      },
+      "expected_result": {
+        "title": "Update failed!",
+        "text": "Image field required."
+      }
+    },
+    "TC_015": {
+      "data": {
+        "profile_picture": "https://cdn-icons-png.flaticon.com/512/9327/9327067.png"
+      },
+      "expected_result": {
+        "title": "Update successful!"
+      }
+    },
+    "TC_016": {
+      "data": {
+        "username": ""
+      },
+      "expected_result": {
+        "title": "Update failed!",
+        "text": "Username field required."
+      }
+    },
+    "TC_017": {
+      "data": {
+        "username": "VorosMacska23"
+      },
+      "expected_result": {
+        "title": "Update successful!"
+      }
+    },
+    "TC_019": {
+      "data": {
+        "email": ""
+      },
+      "expected_result": {
+        "title": "Update failed!",
+        "text": "Email field required."
+      }
+    },
+    "TC_020": {
+      "data": {
+        "email": "testuser1@example.com"
+      },
+      "expected_result": {
+        "title": "Update failed!",
+        "text": "Email already taken."
+      }
+    },
+    "TC_023": {
+      "data": {
+        "bio": "Szeretem a piros gombolyagokat."
+      },
+      "expected_result": {
+        "title": "Update successful!"
+      }
+    },
+    "TC_022": {
+      "data": {
+        "password": "PirosCica23"
+      },
+      "requisites": {
+        "email": "piros_cica23@gmail.com",
+        "password": "PirosCica23"
+      },
+      "expected_result": {
+        "title": "Update successful!",
+        "username": "VorosMacska23"
+      }
+    }
+  },
+  "RepeatedInputFromSource": {
+    "ATC_01": {
+      "data": {
+        "file_path": "./test/user_data.csv"
+      },
+      "expected_result": {
+        "title": "Welcome!",
+        "text": "Your registration was successful!"
+      }
+    },
+    "ATC_02": {
+      "data": {
+        "email": "foltos_cica23@gmail.com",
+        "password": "FoltosCica23"
+      },
+      "file_path": "./test/article_data.tsv",
+      "expected_result": {
+        "title": "Welcome!",
+        "text": "Your registration was successful!"
+      }
+    }
+  },
+  "WriteAndDeleteArticle": {
+    "prerequisites": {
+      "email": "piros_cica23@gmail.com",
+      "password": "PirosCica23"
+    },
+    "TC_024": {
+      "data": {
+        "title": "Te milyen cica vagy?",
+        "about": "Cicák fajtái",
+        "article": ",# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n- Hosszú szőrű fajták\n- Hibrid fajták\n\n**Írd meg kommentben a fentiek közül!**",
+        "tags": "cica,kerdes,valasz"
+      },
+      "expected_result": {
+        "title": "Te milyen cica vagy?"
+      }
+    },
+    "TC_025": {
+      "data": {
+        "title": "",
+        "about": "Cicák fajtái",
+        "article": ",# Típusok:\n\n- Rövid szőrű fajták\n- Félhosszú szőrű fajták\n- Hosszú szőrű fajták\n- Hibrid fajták\n\n**Írd meg kommentben a fentiek közül!**",
+        "tags": "cica,kerdes,valasz"
+      },
+      "expected_result": {
+        "title": "Oops!"
+      }
+    },
+    "TC_034": {
+      "data": {
+        "title": "Te milyen cica vagy?"
+      }
+    }
+  },
+  "ListAndSaveData": {
+    "prerequisites": {
+      "email": "piros_cica23@gmail.com",
+      "password": "PirosCica23"
+    },
+    "ATC_05": {
+      "data": {
+        "file_path": "./test/saved_data.tsv"
+      }
+    }
+  }
+}
